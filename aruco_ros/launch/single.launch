@@ -8,7 +8,7 @@
     <arg name="corner_refinement" default="LINES" /> <!-- NONE, HARRIS, LINES, SUBPIX -->
 
 
-    <node pkg="aruco_ros" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single" output="screen">
         <remap from="/camera_info" to="/stereo/$(arg eye)/camera_info" />
         <remap from="/image" to="/stereo/$(arg eye)/image_rect_color" />
         <param name="image_is_rectified" value="True"/>

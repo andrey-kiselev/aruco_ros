@@ -38,6 +38,7 @@ or implied, of Rafael Muñoz Salinas.
 #include <aruco/cvdrawingutils.h>
 
 #include <ros/ros.h>
+#include <ros/console.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
@@ -114,8 +115,8 @@ public:
     
 
 
-    image_sub = it.subscribe("/image", 1, &ArucoSimple::image_callback, this);
-    cam_info_sub = nh.subscribe("/camera_info", 1, &ArucoSimple::cam_info_callback, this);
+    image_sub = it.subscribe("/camera/rgb/image_rect_color", 1, &ArucoSimple::image_callback, this);
+    cam_info_sub = nh.subscribe("/camera/rgb/camera_info", 1, &ArucoSimple::cam_info_callback, this);
 
     image_pub = it.advertise("result", 1);
     debug_pub = it.advertise("debug", 1);
