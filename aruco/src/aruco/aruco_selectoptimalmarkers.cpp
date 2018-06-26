@@ -40,9 +40,7 @@ or implied, of Rafael Muñoz Salinas.
 using namespace cv;
 using namespace std;
 
-int HammDist_(const cv::Mat &m1,const cv::Mat & m2)
-{
-  
+int HammDist_(const cv::Mat &m1,const cv::Mat & m2){
     int dist=0;
     for (int y=0;y<5;y++)
         for (int x=0;x<5;x++)
@@ -50,8 +48,8 @@ int HammDist_(const cv::Mat &m1,const cv::Mat & m2)
     return dist;
 
 }
-Mat rotate(Mat  in)
-{
+
+Mat rotate(Mat  in){
     Mat out;
     in.copyTo(out);
     for (int i=0;i<in.rows;i++)
@@ -65,8 +63,7 @@ Mat rotate(Mat  in)
 }
 
 
-int HammDist(const cv::Mat &m1,const cv::Mat & m2)
-{
+int HammDist(const cv::Mat &m1,const cv::Mat & m2){
     cv::Mat mc=m1.clone();
     int minD=std::numeric_limits<int>::max();
     for(int i=0;i<4;i++){
@@ -78,9 +75,7 @@ int HammDist(const cv::Mat &m1,const cv::Mat & m2)
 
 }
 
-int entropy(const cv::Mat &marker)
-{
-  
+int entropy(const cv::Mat &marker){
   //the entropy is calcualte for each bin as the number of elements different from it in its sourroundings
   int totalEntropy=0;
     for (int y=0;y<5;y++)
@@ -89,12 +84,12 @@ int entropy(const cv::Mat &marker)
 	    int maxX=min(x+1,5);
 	    int minY=max(y-1,0);
 	    int maxY=min(y+1,5);
-	    
+
 	    for(int yy=minY;yy<maxY;yy++)
 	      for(int xx=minX;xx<maxX;xx++)
 		  if (marker.at<uchar>(y,x)!=marker.at<uchar>(yy,xx)) totalEntropy++;
 	}
-     
+
     return totalEntropy;
 }
 
