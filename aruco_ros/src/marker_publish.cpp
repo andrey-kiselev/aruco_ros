@@ -82,15 +82,14 @@ private:
 
 public:
 	ArucoMarkerPublisher(): nh_("~"), it_(nh_), useCamInfo_(true) {
-		
+
 		image_sub_ = it_.subscribe("/camera/rgb/image_rect_color", 1, &ArucoMarkerPublisher::image_callback, this);
-		
 		nh_.param<bool>("use_camera_info", useCamInfo_, true);
-		
+
 		if(useCamInfo_) {
-			sensor_msgs::CameraInfoConstPtr msg = ros::topic::waitForMessage<sensor_msgs::CameraInfo>("/camera/rgb/camera_info", nh_);//, 10.0);
+			sensor_msgs::CameraInfoConstPtr msg = ros::topic::waitForMessage<sensor_msgs::CameraInfo>("/camera/projector/camera_info", nh_);//, 10.0);
 			camParam_ = aruco_ros::rosCameraInfo2ArucoCamParams(*msg, useRectifiedImages_);
-			nh_.param<double>("marker_size", marker_size_, 0.05);
+			nh_.param<double>("marker_size", marker_size_, 0.08);
 			nh_.param<bool>("image_is_rectified", useRectifiedImages_, true);
 			nh_.param<std::string>("reference_frame", reference_frame_, "");
 			nh_.param<std::string>("camera_frame", camera_frame_, "");
@@ -113,17 +112,15 @@ public:
 		marker_msg_->header.seq = 0;
 	}
 
-	bool getTransform(	const std::string& refFrame,
-						const std::string& childFrame,
-						tf::StampedTransform& transform) {
+	bool getTransform(const std::string& refFrame, const std::string& childFrame, tf::StampedTransform& transform) {
 		std::string errMsg;
 
 		if(!tfListener_.waitForTransform(	refFrame,
-											childFrame,
-											ros::Time(0),
-											ros::Duration(0.5),
-											ros::Duration(0.01),
-											&errMsg)) {
+							childFrame,
+							ros::Time(0),
+							ros::Duration(0.5),
+							ros::Duration(0.01),
+							&errMsg)) {
 			ROS_ERROR_STREAM("Unable to get pose from TF: " << errMsg);
 			return false;
 		} else {
