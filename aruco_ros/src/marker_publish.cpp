@@ -56,6 +56,8 @@ private:
 	vector<aruco::Marker> markers_;
 
 	// node params
+	std::string image_topic_;
+	std::string cam_info_topic_;
 	bool useRectifiedImages_;
 	std::string marker_frame_;
 	std::string camera_frame_;
@@ -82,15 +84,18 @@ private:
 
 public:
 	ArucoMarkerPublisher(): nh_("~"), it_(nh_), useCamInfo_(true) {
+		
+		nh_.param<std::string>("image_topic", image_topic_, "/camera/rgb/image_raw");
+		nh_.param<std::string>("camera_info_topic", cam_info_topic_, "/camera/rgb/camera_info");
 
-		image_sub_ = it_.subscribe("/camera/rgb/image_rect_color", 1, &ArucoMarkerPublisher::image_callback, this);
+		image_sub_ = it_.subscribe(image_topic_, 1, &ArucoMarkerPublisher::image_callback, this);
 		nh_.param<bool>("use_camera_info", useCamInfo_, true);
 
 		if(useCamInfo_) {
-			sensor_msgs::CameraInfoConstPtr msg = ros::topic::waitForMessage<sensor_msgs::CameraInfo>("/camera/projector/camera_info", nh_);//, 10.0);
+			sensor_msgs::CameraInfoConstPtr msg = ros::topic::waitForMessage<sensor_msgs::CameraInfo>(cam_info_topic_, nh_);//, 10.0);
 			camParam_ = aruco_ros::rosCameraInfo2ArucoCamParams(*msg, useRectifiedImages_);
 			nh_.param<double>("marker_size", marker_size_, 0.08);
-			nh_.param<bool>("image_is_rectified", useRectifiedImages_, true);
+			nh_.param<bool>("image_is_rectified", useRectifiedImages_, false);
 			nh_.param<std::string>("reference_frame", reference_frame_, "");
 			nh_.param<std::string>("camera_frame", camera_frame_, "");
 			ROS_ASSERT(not (camera_frame_.empty() and not reference_frame_.empty()));
