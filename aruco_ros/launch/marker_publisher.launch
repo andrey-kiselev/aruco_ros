@@ -4,7 +4,7 @@
 	<arg name="camera_info_topic"	default="/camera/rgb/camera_info"/>
 
 	<arg name="marker_size" 		default="0.08"/>    <!-- in m -->
-	<arg name="rectified" 			default="false"/>    <!-- in m -->
+	<arg name="rectified" 			default="false"/>
 
 	<arg name="ref_frame" 			default="camera_rgb_optical_frame"/>  <!-- leave empty and the pose will be published wrt param parent_name -->
 	<arg name="cam_frame" 			default="camera_rgb_optical_frame"/>  <!-- leave empty and the pose will be published wrt param parent_name -->
